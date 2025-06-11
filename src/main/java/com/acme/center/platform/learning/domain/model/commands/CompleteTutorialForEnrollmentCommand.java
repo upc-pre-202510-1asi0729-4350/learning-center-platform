@@ -1,11 +1,13 @@
 package com.acme.center.platform.learning.domain.model.commands;
 
-public record CompleteTutorialForEnrollmentCommand(Long enrollmentId, Long tutorialId) {
+import com.acme.center.platform.learning.domain.model.valueobjects.TutorialId;
+
+public record CompleteTutorialForEnrollmentCommand(Long enrollmentId, TutorialId tutorialId) {
     public CompleteTutorialForEnrollmentCommand {
         if (enrollmentId == null || enrollmentId <= 0) {
             throw new IllegalArgumentException("Enrollment ID must be a positive number");
         }
-        if (tutorialId == null || tutorialId <= 0) {
+        if (tutorialId == null || tutorialId.tutorialId() == null || tutorialId.tutorialId() <= 0) {
             throw new IllegalArgumentException("Tutorial ID must be a positive number");
         }
     }
