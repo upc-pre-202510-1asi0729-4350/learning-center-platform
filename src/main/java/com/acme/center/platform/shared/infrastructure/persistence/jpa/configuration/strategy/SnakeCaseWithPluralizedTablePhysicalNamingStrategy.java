@@ -1,4 +1,4 @@
-package com.acme.center.platform.shared.infrastructure.persistence.jpa.strategy;
+package com.acme.center.platform.shared.infrastructure.persistence.jpa.configuration.strategy;
 
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
@@ -15,7 +15,7 @@ import static io.github.encryptorcode.pluralize.Pluralize.pluralize;
  * @since 1.0
  * @see PhysicalNamingStrategy
  */
-public class SnakeCasePhysicalNamingStrategy implements PhysicalNamingStrategy {
+public class SnakeCaseWithPluralizedTablePhysicalNamingStrategy implements PhysicalNamingStrategy {
     @Override
     public Identifier toPhysicalCatalogName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
         return this.toSnakeCase(identifier);
