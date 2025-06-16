@@ -1,5 +1,6 @@
 package com.acme.center.platform.learning.interfaces.rest;
 
+import com.acme.center.platform.learning.domain.model.commands.CancelEnrollmentCommand;
 import com.acme.center.platform.learning.domain.model.commands.ConfirmEnrollmentCommand;
 import com.acme.center.platform.learning.domain.model.commands.RejectEnrollmentCommand;
 import com.acme.center.platform.learning.domain.model.queries.GetEnrollmentByAcmeStudentRecordIdAndCourseIdQuery;
@@ -76,6 +77,19 @@ public class EnrollmentsController {
     public ResponseEntity<MessageResource> rejectEnrollment(@PathVariable Long enrollmentId) {
         var rejectEnrollmentCommand = new RejectEnrollmentCommand(enrollmentId);
         enrollmentCommandService.handle(rejectEnrollmentCommand);
+        return ResponseEntity.ok(new MessageResource("Enrollment rejected: " + enrollmentId));
+
+    }
+
+    @PostMapping("/{enrollmentId}/cancellations")
+    @Operation(summary = "Cancel Enrollment", description = "Cancel an enrollment for a course by providing the enrollment ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Enrollment cancelled successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad Request - Invalid enrollment ID")
+    })
+    public ResponseEntity<MessageResource> cancelEnrollment(@PathVariable Long enrollmentId) {
+        var cancelEnrollmentCommand = new CancelEnrollmentCommand(enrollmentId);
+        enrollmentCommandService.handle(cancelEnrollmentCommand);
         return ResponseEntity.ok(new MessageResource("Enrollment rejected: " + enrollmentId));
 
     }
