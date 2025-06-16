@@ -32,13 +32,13 @@ public class LearningPath {
                 item -> item.getId().equals(itemId));
     }
 
-    public LearningPathItem getLearningPathItemWithTutorialId(Long tutorialId) {
+    public LearningPathItem getLearningPathItemWithTutorialId(TutorialId tutorialId) {
         return this.getFirstLearningPathItemWhere(
-                item -> item.getTutorialId().tutorialId().equals(tutorialId));
+                item -> item.getTutorialId().tutorialId().equals(tutorialId.tutorialId()));
     }
 
     public TutorialId getNextTutorialInLearningPath(TutorialId currentTutorialId) {
-        LearningPathItem nextItem = getLearningPathItemWithTutorialId(currentTutorialId.tutorialId())
+        LearningPathItem nextItem = getLearningPathItemWithTutorialId(currentTutorialId)
                 .getNextItem();
         return !Objects.isNull(nextItem) ? nextItem.getTutorialId() : null;
     }
@@ -73,7 +73,7 @@ public class LearningPath {
     }
 
     public void addItem(Course course, TutorialId tutorialId, TutorialId nextTutorialId) {
-        LearningPathItem nextItem = getLearningPathItemWithTutorialId(nextTutorialId.tutorialId());
+        LearningPathItem nextItem = getLearningPathItemWithTutorialId(nextTutorialId);
         addItem(course, tutorialId, nextItem);
     }
 }
