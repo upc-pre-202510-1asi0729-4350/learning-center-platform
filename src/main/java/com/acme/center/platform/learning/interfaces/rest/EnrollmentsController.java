@@ -3,6 +3,7 @@ package com.acme.center.platform.learning.interfaces.rest;
 import com.acme.center.platform.learning.domain.model.commands.CancelEnrollmentCommand;
 import com.acme.center.platform.learning.domain.model.commands.ConfirmEnrollmentCommand;
 import com.acme.center.platform.learning.domain.model.commands.RejectEnrollmentCommand;
+import com.acme.center.platform.learning.domain.model.queries.GetAllEnrollmentsQuery;
 import com.acme.center.platform.learning.domain.model.queries.GetEnrollmentByAcmeStudentRecordIdAndCourseIdQuery;
 import com.acme.center.platform.learning.domain.services.EnrollmentCommandService;
 import com.acme.center.platform.learning.domain.services.EnrollmentQueryService;
@@ -19,6 +20,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -92,6 +95,19 @@ public class EnrollmentsController {
         enrollmentCommandService.handle(cancelEnrollmentCommand);
         return ResponseEntity.ok(new MessageResource("Enrollment rejected: " + enrollmentId));
 
+    }
+
+    @GetMapping
+    @Operation(summary = "Get all enrollments", description = "Retrieve all registered enrollments.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Enrollments retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "No enrollments found")})
+    public ResponseEntity<List<EnrollmentResource>> getAllEnrollments() {
+        var enrollments = enrollmentQueryService.handle(new GetAllEnrollmentsQuery());
+        var enrollmentResources = enrollments.stream()
+                .map(EnrollmentResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(enrollmentResources);
     }
 
 }

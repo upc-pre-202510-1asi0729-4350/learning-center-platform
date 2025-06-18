@@ -12,6 +12,7 @@ public class CreateStudentCommandFromResourceAssembler {
                 resource.street(),
                 resource.number(),
                 resource.city(),
+                resource.state(),
                 resource.postalCode(),
                 resource.country()
         );

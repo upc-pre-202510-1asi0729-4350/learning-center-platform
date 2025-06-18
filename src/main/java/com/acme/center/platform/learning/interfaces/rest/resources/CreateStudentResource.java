@@ -7,6 +7,7 @@ public record CreateStudentResource(
         String street,
         String number,
         String city,
+        String state,
         String postalCode,
         String country
 ) {
@@ -16,6 +17,7 @@ public record CreateStudentResource(
         if (email == null || email.isBlank()) throw new IllegalArgumentException("Email cannot be null or blank");
         if (street == null || street.isBlank()) throw new IllegalArgumentException("Street cannot be null or blank");
         if (city == null || city.isBlank()) throw new IllegalArgumentException("City cannot be null or blank");
+        if (state == null || state.isBlank()) throw new IllegalArgumentException("State cannot be null or blank");
         if (postalCode == null || postalCode.isBlank()) throw new IllegalArgumentException("Postal code cannot be null or blank");
         if (country == null || country.isBlank()) throw new IllegalArgumentException("Country cannot be null or blank");
     }

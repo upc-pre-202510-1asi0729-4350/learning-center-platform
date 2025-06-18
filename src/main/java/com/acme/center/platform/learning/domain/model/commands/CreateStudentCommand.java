@@ -1,6 +1,6 @@
 package com.acme.center.platform.learning.domain.model.commands;
 
-public record CreateStudentCommand(String firstName, String lastName, String email, String street, String number, String city, String postalCode, String country) {
+public record CreateStudentCommand(String firstName, String lastName, String email, String street, String number, String city, String state,  String postalCode, String country) {
     public CreateStudentCommand {
         if (firstName == null || firstName.isBlank()) {
             throw new IllegalArgumentException("First name cannot be null or blank");
@@ -19,6 +19,9 @@ public record CreateStudentCommand(String firstName, String lastName, String ema
         }
         if (city == null || city.isBlank()) {
             throw new IllegalArgumentException("City cannot be null or blank");
+        }
+        if (state == null || state.isBlank()) {
+            throw new IllegalArgumentException("State cannot be null or blank");
         }
         if (postalCode == null || postalCode.isBlank()) {
             throw new IllegalArgumentException("Postal code cannot be null or blank");

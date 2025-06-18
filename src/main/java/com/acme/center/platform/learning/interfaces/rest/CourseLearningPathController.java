@@ -10,6 +10,7 @@ import com.acme.center.platform.learning.interfaces.rest.transform.LearningPathI
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(value = "/api/v1/courses/{courseId}/learning-path-items", produces = APPLICATION_JSON_VALUE)
+@Tag(name = "Courses", description = "Available Course Endpoints")
 public class CourseLearningPathController {
     private final CourseCommandService courseCommandService;
     private final CourseQueryService courseQueryService;
