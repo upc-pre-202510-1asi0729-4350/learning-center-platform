@@ -40,15 +40,18 @@ public class Enrollment extends AuditableAbstractAggregateRoot<Enrollment> {
         this.progressRecord = new ProgressRecord(); // Initialize progress record
     }
 
-    public void confirm() {
+    public Enrollment confirm() {
         this.status = EnrollmentStatus.CONFIRMED;
         this.progressRecord.initializeProgressRecord(this, course.getLearningPath());
+        return this;
     }
-    public void reject() {
+    public Enrollment reject() {
         this.status = EnrollmentStatus.REJECTED;
+        return this;
     }
-    public void cancel() {
+    public Enrollment cancel() {
         this.status = EnrollmentStatus.CANCELLED;
+        return this;
     }
 
     public boolean isConfirmed() {

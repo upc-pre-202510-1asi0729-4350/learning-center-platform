@@ -8,6 +8,8 @@ import com.acme.center.platform.learning.infrastructure.persistence.jpa.reposito
 import com.acme.center.platform.learning.infrastructure.persistence.jpa.repositories.StudentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 @Service
 public class EnrollmentCommandServiceImpl implements EnrollmentCommandService {
     private final EnrollmentRepository enrollmentRepository;
@@ -37,41 +39,52 @@ public class EnrollmentCommandServiceImpl implements EnrollmentCommandService {
 
     @Override
     public Long handle(ConfirmEnrollmentCommand command) {
-        enrollmentRepository.findById(command.enrollmentId()).map(enrollment -> {
-            enrollment.confirm();
-            enrollmentRepository.save(enrollment);
-            return enrollment.getId();
-        }).orElseThrow(() -> new IllegalArgumentException("Enrollment with ID " + command.enrollmentId() + " does not exist."));
-        return null;
+        var enrollment = enrollmentRepository.findById(command.enrollmentId());
+        if (enrollment.isEmpty()) return 0L;
+        var enrollmentToConfirm = enrollment.get();
+        try {
+            enrollmentRepository.save(enrollmentToConfirm.confirm());
+            return enrollmentToConfirm.getId();
+        } catch (Exception e) {
+            System.out.println("Failed to confirm enrollment: " + e.getMessage());
+            return 0L;
+        }
     }
 
     @Override
     public Long handle(RejectEnrollmentCommand command) {
-        enrollmentRepository.findById(command.enrollmentId()).map( enrollment -> {
-            enrollment.reject();
-            enrollmentRepository.save(enrollment);
-            return enrollment.getId();
-        }).orElseThrow(() -> new IllegalArgumentException("Enrollment with ID " + command.enrollmentId() + " does not exist."));
-        return null;
+        var enrollment = enrollmentRepository.findById(command.enrollmentId());
+        if (enrollment.isEmpty()) return 0L;
+        var enrollmentToReject = enrollment.get();
+        try {
+            enrollmentRepository.save(enrollmentToReject.reject());
+            return enrollmentToReject.getId();
+        } catch (Exception e) {
+            System.out.println("Failed to confirm enrollment: " + e.getMessage());
+            return 0L;
+        }
     }
 
     @Override
     public Long handle(CancelEnrollmentCommand command) {
-        enrollmentRepository.findById(command.enrollmentId()).map( enrollment -> {
-            enrollment.cancel();
-            enrollmentRepository.save(enrollment);
-            return enrollment.getId();
-        }).orElseThrow(() -> new IllegalArgumentException("Enrollment with ID " + command.enrollmentId() + " does not exist."));
-        return null;
+        var enrollment = enrollmentRepository.findById(command.enrollmentId());
+        if (enrollment.isEmpty()) return 0L;
+        var enrollmentToCancel = enrollment.get();
+        try {
+            enrollmentRepository.save(enrollmentToCancel.cancel());
+            return enrollmentToCancel.getId();
+        } catch (Exception e) {
+            System.out.println("Failed to confirm enrollment: " + e.getMessage());
+            return 0L;
+        }
     }
 
     @Override
     public Long handle(CompleteTutorialForEnrollmentCommand command) {
-        enrollmentRepository.findById(command.enrollmentId()).map(enrollment -> {
+        return enrollmentRepository.findById(command.enrollmentId()).map(enrollment -> {
             enrollment.completeTutorial(command.tutorialId());
             enrollmentRepository.save(enrollment);
             return enrollment.getId();
         }).orElseThrow(() -> new IllegalArgumentException("Enrollment with ID " + command.enrollmentId() + " does not exist."));
-        return null;
     }
 }

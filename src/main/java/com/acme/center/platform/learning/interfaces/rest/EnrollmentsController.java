@@ -65,8 +65,8 @@ public class EnrollmentsController {
     })
     public ResponseEntity<MessageResource> confirmEnrollment(@PathVariable Long enrollmentId) {
         var confirmEnrollmentCommand = new ConfirmEnrollmentCommand(enrollmentId);
-        var confirmedEnrollment = enrollmentCommandService.handle(confirmEnrollmentCommand);
-        if (confirmedEnrollment == null || confirmedEnrollment.equals(0L)) return ResponseEntity.badRequest().build();
+        var confirmedEnrollmentId = enrollmentCommandService.handle(confirmEnrollmentCommand);
+        if (confirmedEnrollmentId == null || confirmedEnrollmentId.equals(0L)) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(new MessageResource("Enrollment confirmed successfully"));
 
     }
@@ -93,7 +93,7 @@ public class EnrollmentsController {
     public ResponseEntity<MessageResource> cancelEnrollment(@PathVariable Long enrollmentId) {
         var cancelEnrollmentCommand = new CancelEnrollmentCommand(enrollmentId);
         enrollmentCommandService.handle(cancelEnrollmentCommand);
-        return ResponseEntity.ok(new MessageResource("Enrollment rejected: " + enrollmentId));
+        return ResponseEntity.ok(new MessageResource("Enrollment cancelled: " + enrollmentId));
 
     }
 
